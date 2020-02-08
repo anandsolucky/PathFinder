@@ -1,0 +1,82 @@
+.header {
+  height: 50px;
+  background-color: #8B8BE2;
+}
+.title {
+  max-width: 150px;
+}
+.title  span {
+  color: white;
+  font-weight: 500;
+  text-transform: capitalize;
+  letter-spacing: 1px;
+  line-height: 1.5;
+}
+
+.visualise button{
+  color: white;
+  border: 2px solid white;
+  border-radius: 8px;
+  text-align: center;
+  margin-left: 380px;
+  height: 48px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+}
+
+.algorithm select {
+  text-align: center;
+  color: white;
+  border: 2px solid white;
+  border-radius: 8px;
+  height: 100%;
+  margin-left: 410px;
+  background-color: #8B8BE2;
+  /* box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); */
+}
+
+.hvr-grow {
+  display: inline-block;
+  vertical-align: middle;
+  transform: translateZ(0);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+  backface-visibility: hidden;
+  -moz-osx-font-smoothing: grayscale;
+  transition-duration: 0.3s;
+  transition-property: transform;
+}
+
+/* .hvr-grow:hover,
+.hvr-grow:focus,
+.hvr-grow:active {
+  transform: scale(1.08);
+} */
+
+.img {
+  height: 80px;
+  width: 180px;
+  display: inline-block;
+  background-repeat: no-repeat;
+  background-size: 110px;
+  margin-top: 10px;
+  margin-right: 70px;
+  margin-left: 40px;
+}
+div .source {
+  background-image: url('./source.png');
+}
+div .alternate {
+  background-size: 130px;
+  background-image: url('./alternatePath.png');
+}
+div .destination {
+  background-image: url('./destination.png');
+}
+div .shortest {
+  background-size: 130px;
+  background-image: url('./shortestPath.png');
+}
+
+.legends {
+  height: 40px;
+  margin-top: 20px;
+}

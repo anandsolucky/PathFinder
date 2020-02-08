@@ -1,0 +1,11 @@
+.cellDiv {
+  border: .0937em solid #8B8BE2;
+  border-radius: 4px;
+  width: 45px;
+  display: inline-block;
+  height: 38px;
+  background-color: white;
+}
+.row {
+  margin-left: 50px;
+}
