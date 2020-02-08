@@ -45,11 +45,11 @@
   transition-property: transform;
 }
 
-/* .hvr-grow:hover,
+.hvr-grow:hover,
 .hvr-grow:focus,
 .hvr-grow:active {
   transform: scale(1.08);
-} */
+}
 
 .img {
   height: 80px;
