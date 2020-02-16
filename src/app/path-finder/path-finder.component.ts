@@ -18,18 +18,19 @@ export class PathFinderComponent implements OnInit {
   source; destination;
   i: number;
   j: number;
-  gridSize = 8;
+  gridSize = 14;
   pathInAlphabet = [];
   pathinCellPoints = [];
   row: number; col: number;
   stylePathArr = [];
   visualizeButtonListener: Subscription;
+  pathGenrationListener: Subscription;
   /***********************************************************************/
   constructor(private algorithmService: AlgorithmServiceService) {
 
     for ( this.i = 0; this.i <= this.gridSize; this.i++) {
       this.grid[this.i] = [];
-      for ( this.j = 0; this.j <= this.gridSize ; this.j++ ) {
+      for ( this.j = 0; this.j <= this.gridSize + 26; this.j++ ) {
           this.grid[this.i][this.j] = '' + this.i + ',' + this.j + '';
         }
     }
@@ -40,7 +41,7 @@ export class PathFinderComponent implements OnInit {
     this.calculatingGrid = [...this.grid];
     for ( this.i = 0; this.i <= this.gridSize; this.i++) {
       this.calculatingGrid[this.i] = [];
-      for ( this.j = 0; this.j <= this.gridSize ; this.j++ ) {
+      for ( this.j = 0; this.j <= this.gridSize + 26 ; this.j++ ) {
           this.calculatingGrid[this.i][this.j] = '1';
         }
     }
@@ -50,6 +51,10 @@ export class PathFinderComponent implements OnInit {
       .subscribe(() => {
         // calling AStart algorithm with the grid, source, & destination as parameter
         this.algorithmService.AstarSearchAlgo(this.calculatingGrid, this.source, this.destination);
+      });
+    this.pathGenrationListener = this.algorithmService.PathGenerateListener()
+      .subscribe( (receivedPath) => {
+        this.stylePathArray(receivedPath);
       });
   }
   onClick(cell) {
@@ -101,8 +106,8 @@ export class PathFinderComponent implements OnInit {
     }
     function task(i) {
       setTimeout( () => {
-        document.getElementById(pathinCellPoints[i]).setAttribute('style', 'background: linear-gradient(#dff5f7, #dff5f7) no-repeat;');
-      }, 500 * i );
+        document.getElementById(pathinCellPoints[i]).setAttribute('style', 'background: linear-gradient(#db53d5, #dff5f7) no-repeat;');
+      }, 80 * i );
     }
   }
   stylePathSingleFill(stylePathSingleArr, callback) {

@@ -12,17 +12,22 @@ export class AlgorithmServiceService {
   ROW: number; COL: number;
   closedList: boolean[][] = [];
   cellDetails: Cell[][] = [];
-  openList: PPair[] = [];
+  openList = new Set<PPair>();
   gNew: number;
   hNew: number;
   fNew: number;
   foundDest = false;
+  generatedPath = [];
+  pathGenerateListener = new Subject();
   constructor() { }
   visualizeClicked() {
     this.buttonListener.next();
   }
   VisualbuttonClickListener() {
     return this.buttonListener.asObservable();
+  }
+  PathGenerateListener() {
+    return this.pathGenerateListener.asObservable();
   }
   AstarSearchAlgo(grid, source, destination) {
     const sourceI = parseInt(source.split(',')[0], 10);
@@ -80,12 +85,15 @@ export class AlgorithmServiceService {
 
     // Put the starting cell on the open list and set its
     // 'f' as 0
-    this.openList.push({f: 0.0, pair: {i, j}});
+
+    this.openList.add({f: 0.0, pair: {i, j}});
 
 
 
-    while (this.openList.length !== 0) {
-      const p = this.openList.pop();
+    while (this.openList.size !== 0) {
+      const it = this.openList.values();
+      const p = it.next().value;
+      this.openList.delete(p);
       // Add this vertex to the closed list
       i = p.pair.i;
       j = p.pair.j;
@@ -94,43 +102,43 @@ export class AlgorithmServiceService {
 
 
       // ----------- 1st Successor (North) ------------
-      this.processSuccessor(grid, i - 1, j, i, j);
+      this.processSuccessor(grid, i - 1, j, i, j, 'Straight');
       if (this.foundDest) {
         return;
       }
       // ----------- 2nd Successor (South) ------------
-      this.processSuccessor(grid, i + 1, j, i, j);
+      this.processSuccessor(grid, i + 1, j, i, j, 'Straight');
       if (this.foundDest) {
         return;
       }
       // ----------- 3rd Successor (East) ------------
-      this.processSuccessor(grid, i , j + 1, i, j);
+      this.processSuccessor(grid, i , j + 1, i, j, 'Straight');
       if (this.foundDest) {
         return;
       }
       // ----------- 4th Successor (West) ------------
-      this.processSuccessor(grid, i, j - 1, i, j);
+      this.processSuccessor(grid, i, j - 1, i, j, 'Straight');
       if (this.foundDest) {
         return;
       }
       // ----------- 5th Successor (North-East) ------------
-      this.processSuccessor(grid, i - 1, j + 1, i, j);
+      this.processSuccessor(grid, i - 1, j + 1, i, j, 'Diagonal');
       if (this.foundDest) {
         return;
       }
       // ----------- 6th Successor (North-West) ------------
 
-      this.processSuccessor(grid, i - 1, j - 1, i, j);
+      this.processSuccessor(grid, i - 1, j - 1, i, j, 'Diagonal');
       if (this.foundDest) {
         return;
       }
       // ----------- 7th Successor (South-East) ------------
-      this.processSuccessor(grid, i + 1, j + 1, i, j);
+      this.processSuccessor(grid, i + 1, j + 1, i, j, 'Diagonal');
       if (this.foundDest) {
         return;
       }
       // ----------- 8th Successor (South-West) ------------
-      this.processSuccessor(grid, i + 1, j - 1, i, j);
+      this.processSuccessor(grid, i + 1, j - 1, i, j, 'Diagonal');
       if (this.foundDest) {
         return;
       }
@@ -190,9 +198,10 @@ export class AlgorithmServiceService {
     Path.push ({i: row, j: col});
     while (Path.length > 0) {
       topPair = Path.pop();
+      this.generatedPath.push( topPair.i + ',' + topPair.j);
       console.log('->' + topPair.i + topPair.j);
     }
-
+    this.pathGenerateListener.next([...this.generatedPath]);
     return;
   }
   initializeClosedList(closedList) {
@@ -218,7 +227,7 @@ export class AlgorithmServiceService {
 
   /***********************************************************************************/
 
-  processSuccessor(grid, i: number, j: number, currI: number, currJ: number) {
+  processSuccessor(grid, i: number, j: number, currI: number, currJ: number, pathType: string) {
     if (this.isValid(i, j) === true) {
       // If the destination cell is the same as the
       // current successor
@@ -232,12 +241,16 @@ export class AlgorithmServiceService {
         return;
       } else if (this.closedList[i][j] === false &&
         this.isUnBlocked(grid, i, j) === true) {
-        this.gNew = this.cellDetails[currI][currJ].g + 1.0;
+        if (pathType === 'Straight') { // add 1.0 for straight path and 1.44 for diagonal
+          this.gNew = this.cellDetails[currI][currJ].g + 1.0;
+        } else {
+          this.gNew = this.cellDetails[currI][currJ].g + 1.414;
+        }
         this.hNew = this.calculateHValue (i , j, this.destPair);
         this.fNew = this.gNew + this.hNew;
         if (this.cellDetails[i][j].f === Number.MAX_SAFE_INTEGER ||
           this.cellDetails[i][j].f > this.fNew) {
-          this.openList.push({f: this.fNew, pair: {i, j}});
+          this.openList.add({f: this.fNew, pair: {i, j}});
           // Update the details of this cell
           this.cellDetails[i][j].f = this.fNew;
           this.cellDetails[i][j].g = this.gNew;
