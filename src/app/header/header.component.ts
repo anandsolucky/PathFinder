@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AlgorithmServiceService } from '../algorithm-service.service';
 
 @Component({
   selector: 'app-header',
@@ -7,11 +8,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
 
-  constructor() { }
+  constructor(private algorithmService: AlgorithmServiceService) { }
 
   ngOnInit() {
   }
   refresh() {
     window.location.reload();
+  }
+  visualiseClick() {
+    this.algorithmService.visualizeClicked();
   }
 }

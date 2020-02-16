@@ -1,7 +1,7 @@
-<div class="mainDiv" >
+<div class="mainDiv" (mouseleave)="outsideBox()">
   <div class="row" *ngFor="let array of grid">
     <div class="col-lg-12" style="margin-top: -7px;">
-      <div id='{{ cell }}' class="cellDiv" (click)="onClick(cell)" *ngFor="let cell of array">
+      <div id='{{ cell }}' class="cellDiv" (click)="onClick(cell)" (mouseover)="mouseMove(cell)" (mouseup)="mouseUp(cell)" (mousedown)="mouseDown(cell)" *ngFor="let cell of array">
     </div>
     </div>
   </div>
