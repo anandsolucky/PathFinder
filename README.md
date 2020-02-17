@@ -1,5 +1,11 @@
 # PathFinderApp
 
+This is a web app which demonstrates how A star Search algorithm finds a path from source to destination.
+
+Functionality is simple, you need to put a source and a destination.
+
+Once source and destination are entered you just need to press visualize button.
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.21.
 
 ## Development server
